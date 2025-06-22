@@ -155,8 +155,8 @@ export default function JobDetail() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="min-h-screen bg-background p-8">
-        <div className="container mx-auto max-w-4xl">
+      <div className="min-h-screen bg-background sm:p-8 p-4">
+        <div className="sm:container mx-auto max-w-4xl">
           {/* Back Button */}
           <div className="mb-6">
             <Link href="/">
@@ -185,7 +185,7 @@ export default function JobDetail() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <Badge variant="secondary" className="mb-2">
+                  <Badge variant="secondary" className="mb-2 text-nowrap">
                     <Clock className="mr-1 h-3 w-3" />
                     {job.type}
                   </Badge>

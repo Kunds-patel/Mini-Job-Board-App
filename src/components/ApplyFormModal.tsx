@@ -124,7 +124,7 @@ const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Name Field */}
           <div className="space-y-2">
             <Label htmlFor="name">Full Name *</Label>
@@ -222,10 +222,11 @@ const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
               variant="outline"
               onClick={handleClose}
               disabled={isSubmitting}
+              className="mt-2"
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting} className="mt-2">
               {isSubmitting ? (
                 <>
                   <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent" />

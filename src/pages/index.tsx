@@ -1,10 +1,15 @@
-import { useEffect } from 'react';
-import Head from 'next/head';
+import { useEffect } from "react";
+import Head from "next/head";
 import { Button } from "@/components/ui/button";
 import JobFilter from "@/components/JobFilter";
 import JobCard from "@/components/JobCard";
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { fetchJobs, selectFilteredJobs, selectLoading, selectError } from '@/features/jobsDataSlice';
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import {
+  fetchJobs,
+  selectFilteredJobs,
+  selectLoading,
+  selectError,
+} from "@/features/jobsDataSlice";
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -21,23 +26,32 @@ export default function Home() {
     <>
       <Head>
         <title>Mini Job Board App - Find Your Next Career</title>
-        <meta name="description" content="Discover amazing job opportunities in tech, design, and more. Apply to top companies with our easy-to-use job board." />
-        <meta name="keywords" content="jobs, careers, employment, tech jobs, remote work, full-time, part-time" />
+        <meta
+          name="description"
+          content="Discover amazing job opportunities in tech, design, and more. Apply to top companies with our easy-to-use job board."
+        />
+        <meta
+          name="keywords"
+          content="jobs, careers, employment, tech jobs, remote work, full-time, part-time"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:title" content="Mini Job Board App" />
-        <meta property="og:description" content="Find your next career opportunity" />
+        <meta
+          property="og:description"
+          content="Find your next career opportunity"
+        />
         <meta property="og:type" content="website" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="min-h-screen bg-background p-8">
-        <div className="container mx-auto">
+      <div className="min-h-screen bg-background md:p-8 p-4">
+        <div className="sm:container mx-auto">
           <h1 className="text-4xl font-bold text-foreground mb-8">
             Mini Job Board App
           </h1>
-          
+
           <JobFilter />
-          
+
           {loading ? (
             <div className="text-center py-8">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -46,10 +60,7 @@ export default function Home() {
           ) : error ? (
             <div className="text-center py-8">
               <p className="text-destructive mb-4">{error}</p>
-              <Button 
-                variant="outline" 
-                onClick={() => dispatch(fetchJobs())}
-              >
+              <Button variant="outline" onClick={() => dispatch(fetchJobs())}>
                 Try Again
               </Button>
             </div>
@@ -60,12 +71,14 @@ export default function Home() {
               ))}
             </div>
           )}
-          
+
           {filteredJobs.length === 0 && !loading && !error && (
             <div className="text-center py-8">
-              <p className="text-muted-foreground">No jobs found matching your criteria.</p>
-              <Button 
-                variant="outline" 
+              <p className="text-muted-foreground">
+                No jobs found matching your criteria.
+              </p>
+              <Button
+                variant="outline"
                 className="mt-4"
                 onClick={() => dispatch(fetchJobs())}
               >
