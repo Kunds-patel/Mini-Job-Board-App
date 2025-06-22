@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Upload, FileText, Send, X } from 'lucide-react';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Upload, FileText, Send, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,20 +11,21 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { useAppDispatch } from '@/store/hooks';
-import { addAppliedJob } from '@/features/jobsDataSlice';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useAppDispatch } from "@/store/hooks";
+import { addAppliedJob } from "@/features/jobsDataSlice";
+import { toast } from "sonner";
 
 // Form validation schema - cover letter is now optional
 const applyFormSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Please enter a valid email address'),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
   coverLetter: z.string().optional(),
-  resume: z.instanceof(File, { message: 'Please upload your resume' }),
+  resume: z.instanceof(File, { message: "Please upload your resume" }),
 });
 
 type ApplyFormData = z.infer<typeof applyFormSchema>;
@@ -36,11 +37,11 @@ interface ApplyFormModalProps {
   trigger?: React.ReactNode;
 }
 
-const ApplyFormModal: React.FC<ApplyFormModalProps> = ({ 
-  jobTitle, 
-  companyName, 
+const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
+  jobTitle,
+  companyName,
   jobId,
-  trigger 
+  trigger,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,34 +62,36 @@ const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      setValue('resume', file);
+      setValue("resume", file);
     }
   };
 
   const onSubmit = async (data: ApplyFormData) => {
     setIsSubmitting(true);
-    
+
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    console.log('Form submitted:', data);
-    console.log('Job Title:', jobTitle);
-    console.log('Company:', companyName);
-    console.log('Job ID:', jobId);
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    console.log("Form submitted:", data);
+    console.log("Job Title:", jobTitle);
+    console.log("Company:", companyName);
+    console.log("Job ID:", jobId);
+
     // Store applied job in Redux
     dispatch(addAppliedJob(jobId));
-    
+
     // Store in localStorage
-    const existingAppliedJobs = JSON.parse(localStorage.getItem('appliedJobs') || '[]');
+    const existingAppliedJobs = JSON.parse(
+      localStorage.getItem("appliedJobs") || "[]"
+    );
     if (!existingAppliedJobs.includes(jobId)) {
       existingAppliedJobs.push(jobId);
-      localStorage.setItem('appliedJobs', JSON.stringify(existingAppliedJobs));
+      localStorage.setItem("appliedJobs", JSON.stringify(existingAppliedJobs));
     }
-    
+
     // Show success message
-    alert('Application submitted successfully!');
-    
+    toast.success("Application submitted successfully!");
+
     // Reset form and close modal
     reset();
     setSelectedFile(null);
@@ -116,7 +119,8 @@ const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
         <DialogHeader>
           <DialogTitle>Apply for {jobTitle}</DialogTitle>
           <DialogDescription>
-            Submit your application for the {jobTitle} position at {companyName}.
+            Submit your application for the {jobTitle} position at {companyName}
+            .
           </DialogDescription>
         </DialogHeader>
 
@@ -127,8 +131,8 @@ const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
             <Input
               id="name"
               placeholder="Enter your full name"
-              {...register('name')}
-              className={errors.name ? 'border-destructive' : ''}
+              {...register("name")}
+              className={errors.name ? "border-destructive" : ""}
             />
             {errors.name && (
               <p className="text-sm text-destructive">{errors.name.message}</p>
@@ -142,8 +146,8 @@ const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
               id="email"
               type="email"
               placeholder="Enter your email address"
-              {...register('email')}
-              className={errors.email ? 'border-destructive' : ''}
+              {...register("email")}
+              className={errors.email ? "border-destructive" : ""}
             />
             {errors.email && (
               <p className="text-sm text-destructive">{errors.email.message}</p>
@@ -164,11 +168,11 @@ const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => document.getElementById('resume')?.click()}
+                onClick={() => document.getElementById("resume")?.click()}
                 className="w-full justify-start"
               >
                 <Upload className="mr-2 h-4 w-4" />
-                {selectedFile ? selectedFile.name : 'Choose file'}
+                {selectedFile ? selectedFile.name : "Choose file"}
               </Button>
             </div>
             {selectedFile && (
@@ -181,7 +185,7 @@ const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
                   size="sm"
                   onClick={() => {
                     setSelectedFile(null);
-                    setValue('resume', undefined as any);
+                    setValue("resume", undefined as any);
                   }}
                 >
                   <X className="h-3 w-3" />
@@ -189,7 +193,9 @@ const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
               </div>
             )}
             {errors.resume && (
-              <p className="text-sm text-destructive">{errors.resume.message}</p>
+              <p className="text-sm text-destructive">
+                {errors.resume.message}
+              </p>
             )}
             <p className="text-xs text-muted-foreground">
               Accepted formats: PDF, DOC, DOCX (Max 5MB)
@@ -203,7 +209,7 @@ const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
               id="coverLetter"
               placeholder="Tell us why you're interested in this position and why you'd be a great fit... (Optional)"
               rows={5}
-              {...register('coverLetter')}
+              {...register("coverLetter")}
             />
             <p className="text-xs text-muted-foreground">
               Optional: Add a cover letter to strengthen your application
@@ -239,4 +245,4 @@ const ApplyFormModal: React.FC<ApplyFormModalProps> = ({
   );
 };
 
-export default ApplyFormModal; 
+export default ApplyFormModal;
